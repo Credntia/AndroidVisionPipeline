@@ -14,6 +14,16 @@ compile 'com.google.android.gms:play-services-vision:latest_version'
 compile 'online.devliving:mobilevision-pipeline:latest_version'
 ```
 
+*Maven*
+```xml
+<dependency>
+  <groupId>online.devliving</groupId>
+  <artifactId>mobilevision-pipeline</artifactId>
+  <version>latest_version</version>
+  <type>pom</type>
+</dependency>
+```
+
 ## Usage
 You can add a camera preview with a graphic overlay (to draw stuff over the preview) in xml like this
 ```xml
@@ -31,7 +41,7 @@ You can add a camera preview with a graphic overlay (to draw stuff over the prev
 ```
 Overlay graphics that you draw in the `GraphicOverlay` needs to extend the abstract `GraphicOverlay.Graphic` e.g `FaceGraphic` in the sample which draws a rectangle around a face that the `FaceDetector` has detected. 
 
-To start the preview and detection you need to provide a `CameraSource` and a `Detector` 
+To start the preview and detection you need to provide a `CameraSource` (requires a `Detector` to process the frames) and a `GraphicOverlay` 
 ```java
 mPreview.start(mCameraSource, mGraphicOverlay);
 ```
