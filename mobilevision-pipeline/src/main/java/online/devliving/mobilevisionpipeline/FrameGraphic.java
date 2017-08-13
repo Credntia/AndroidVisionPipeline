@@ -25,7 +25,7 @@ public abstract class FrameGraphic extends GraphicOverlay.Graphic implements Uti
         borderPaint.setStrokeWidth(8);
     }
 
-    abstract protected RectF getFrameRect();
+    abstract protected RectF getFrameRect(float canvasWidth, float canvasHeight);
 
     /**
      * Draw the graphic on the supplied canvas.  Drawing should use the following methods to
@@ -45,7 +45,7 @@ public abstract class FrameGraphic extends GraphicOverlay.Graphic implements Uti
         float height = canvas.getHeight();
 
         Log.d("FRAME-GRAPHIC", "canvas size w: " + width + ", h: " + height);
-        RectF rect = getFrameRect();
+        RectF rect = getFrameRect(width, height);
 
         frameWidth = Float.valueOf(rect.width()).intValue();
         frameHeight = Float.valueOf(rect.height()).intValue();
