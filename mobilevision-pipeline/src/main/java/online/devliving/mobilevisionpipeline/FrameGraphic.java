@@ -25,7 +25,7 @@ public abstract class FrameGraphic extends GraphicOverlay.Graphic implements Uti
         borderPaint.setStrokeWidth(8);
     }
 
-    abstract RectF getFrameRect();
+    abstract protected RectF getFrameRect();
 
     /**
      * Draw the graphic on the supplied canvas.  Drawing should use the following methods to
