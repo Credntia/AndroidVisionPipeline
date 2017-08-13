@@ -20,12 +20,10 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.google.android.gms.vision.CameraSource;
-
 import java.util.HashSet;
 import java.util.Set;
 
-import online.devliving.mobilevisionpipeline.FrameGraphic;
+import online.devliving.mobilevisionpipeline.camera.CameraSource;
 
 /**
  * A view which renders a series of custom graphics to be overlayed on top of an associated preview
