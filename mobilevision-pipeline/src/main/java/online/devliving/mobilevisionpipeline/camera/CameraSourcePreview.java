@@ -149,7 +149,7 @@ public class CameraSourcePreview extends ViewGroup {
         super.onConfigurationChanged(newConfig);
         Log.d(TAG, "Configuration changed");
         if (mCameraSource != null){
-            //mCameraSource.updateRotation();
+            mCameraSource.updateRotation();
             updateOverlay();
         }
     }

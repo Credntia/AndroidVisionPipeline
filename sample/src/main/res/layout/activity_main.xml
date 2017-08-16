@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/topLayout"
     android:orientation="vertical"
@@ -20,4 +20,4 @@
 
     </online.devliving.mobilevisionpipeline.camera.CameraSourcePreview>
 
-</LinearLayout>
+</FrameLayout>

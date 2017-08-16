@@ -45,9 +45,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import online.devliving.mobilevisionpipeline.Util;
 
 // Note: This requires Google Play Services 8.1 or higher, due to using indirect byte buffers for
 // storing images.
@@ -120,6 +124,7 @@ public class CameraSource {
 
     // Guarded by mCameraLock
     private Camera mCamera;
+    private int mCameraId = -1;
 
     private int mFacing = CAMERA_FACING_BACK;
 
@@ -134,8 +139,8 @@ public class CameraSource {
     // These values may be requested by the caller.  Due to hardware limitations, we may need to
     // select close, but not exactly the same values for these.
     private float mRequestedFps = 30.0f;
-    private int mRequestedPreviewWidth = 1024;
-    private int mRequestedPreviewHeight = 768;
+    private int mRequestedPreviewWidth = 0; //1024;
+    private int mRequestedPreviewHeight = 0; //768;
 
 
     private String mFocusMode = null;
@@ -741,13 +746,14 @@ public class CameraSource {
      */
     @SuppressLint("InlinedApi")
     private Camera createCamera() {
-        int requestedCameraId = getIdForRequestedCamera(mFacing);
-        if (requestedCameraId == -1) {
+        mCameraId = getIdForRequestedCamera(mFacing);
+        if (mCameraId == -1) {
             throw new RuntimeException("Could not find requested camera.");
         }
-        Camera camera = Camera.open(requestedCameraId);
+        Camera camera = Camera.open(mCameraId);
 
-        SizePair sizePair = selectSizePair(camera, mRequestedPreviewWidth, mRequestedPreviewHeight);
+        SizePair sizePair = (mRequestedPreviewHeight > 0 && mRequestedPreviewWidth > 0)?
+                selectSizePair(camera, mRequestedPreviewWidth, mRequestedPreviewHeight) : selectSizePair(camera);
         if (sizePair == null) {
             throw new RuntimeException("Could not find suitable preview size.");
         }
@@ -771,7 +777,7 @@ public class CameraSource {
                 previewFpsRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]);
         parameters.setPreviewFormat(ImageFormat.NV21);
 
-        setRotation(camera, parameters, requestedCameraId);
+        setRotation(camera, parameters, mCameraId);
 
         if (mFocusMode != null) {
             if (parameters.getSupportedFocusModes().contains(
@@ -864,6 +870,34 @@ public class CameraSource {
             }
         }
 
+        return selectedPair;
+    }
+
+    /**
+     * Selects the most suitable preview and picture size
+     * <p/>
+     * Even though we may only need the preview size, it's necessary to find both the preview
+     * size and the picture size of the camera together, because these need to have the same aspect
+     * ratio.  On some hardware, if you would only set the preview size, you will get a distorted
+     * image.
+     *
+     * @param camera        the camera to select a preview size from
+     * @return the selected preview and picture size pair
+     */
+    private static SizePair selectSizePair(Camera camera) {
+        List<SizePair> validPreviewSizes = generateValidPreviewSizeList(camera);
+
+        Collections.sort(validPreviewSizes, new Comparator<SizePair>() {
+            @Override
+            public int compare(SizePair lhs, SizePair rhs) {
+                return (rhs.previewSize().getHeight() * rhs.previewSize().getWidth())
+                        - (lhs.previewSize().getHeight() * lhs.previewSize().getWidth());
+            }
+        });
+
+        SizePair selectedPair = validPreviewSizes.get(0);
+        Log.d(TAG, "selected preview size: w:" + selectedPair.previewSize().getWidth()
+                + ", h:" + selectedPair.previewSize().getHeight());
         return selectedPair;
     }
 
@@ -973,6 +1007,11 @@ public class CameraSource {
         return selectedFpsRange;
     }
 
+    public void updateRotation(){
+        if(mCamera != null){
+            setRotation(mCamera, mCamera.getParameters(), mCameraId);
+        }
+    }
     /**
      * Calculates the correct rotation for the given camera id and sets the rotation in the
      * parameters.  It also sets the camera's display orientation and rotation.
@@ -1189,6 +1228,8 @@ public class CameraSource {
                             .setId(mPendingFrameId)
                             .setTimestampMillis(mPendingTimeMillis)
                             .setRotation(mRotation)
+                            .setBitmap(Util.getBitmap(mContext, mPendingFrameData.array(),
+                                    mPreviewSize.getWidth(), mPreviewSize.getHeight()))
                             .build();
 
                     // Hold onto the frame data locally, so that we can use this for detection
