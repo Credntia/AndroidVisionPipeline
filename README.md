@@ -39,6 +39,16 @@ You can add a camera preview with a graphic overlay (to draw stuff over the prev
 
 </online.devliving.mobilevisionpipeline.camera.CameraSourcePreview>
 ```
+There are 2 scale types for the preview defined as 
+```java
+public enum PreviewScaleType{
+    FIT_CENTER,
+    FILL
+}
+```
+for `FIT_CENTER` the preview will shrink (reduce it's width and height) to meet the aspect ratio of the camera's preview size.
+for `FILL` the preview will scale up to fill (may be beyond it's view bounds) and meet the aspect ratio of the camera's preview size.
+
 Overlay graphics that you draw in the `GraphicOverlay` needs to extend the abstract `GraphicOverlay.Graphic` e.g `FaceGraphic` in the sample which draws a rectangle around a face that the `FaceDetector` has detected. 
 
 To start the preview and detection you need to provide a `CameraSource` (requires a `Detector` to process the frames) and a `GraphicOverlay` 
