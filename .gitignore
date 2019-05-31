@@ -7,3 +7,6 @@
 /build
 /captures
 .externalNativeBuild
+mobilevision-pipeline/build
+sample/build
+.idea
