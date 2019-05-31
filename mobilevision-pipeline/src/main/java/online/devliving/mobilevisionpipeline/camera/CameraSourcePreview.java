@@ -70,7 +70,6 @@ public class CameraSourcePreview extends ViewGroup {
 
         if (mCameraSource != null) {
             mStartRequested = true;
-            requestLayout();
             startIfReady();
         }
     }
@@ -100,6 +99,7 @@ public class CameraSourcePreview extends ViewGroup {
             mCameraSource.start(mSurfaceView.getHolder());
             updateOverlay();
             mStartRequested = false;
+            requestLayout(); // mCameraSource.getPreviewSize() is available for updateChildSizeFor...()
         }
     }
 
