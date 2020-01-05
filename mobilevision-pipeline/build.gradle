@@ -6,15 +6,13 @@ apply plugin: "com.jfrog.bintray"
 version = "1.0.8"
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 29
         versionCode 7
         versionName version
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -25,13 +23,9 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compileOnly 'com.google.android.gms:play-services-basement:15.0.1'
-    compileOnly 'com.google.android.gms:play-services-vision:15.0.1'
-    testImplementation 'junit:junit:4.12'
+    compileOnly 'com.google.android.gms:play-services-basement:17.1.1'
+    compileOnly 'com.google.android.gms:play-services-vision:19.0.0'
+    testImplementation 'junit:junit:4.13'
 }
 
 def siteUrl = "https://github.com/Credntia/AndroidVisionPipeline"
