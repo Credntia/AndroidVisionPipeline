@@ -24,11 +24,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 
+import androidx.annotation.RequiresPermission;
+
 import com.google.android.gms.common.images.Size;
 
-import java.io.IOException;
-
-import androidx.annotation.RequiresPermission;
 import online.devliving.mobilevisionpipeline.GraphicOverlay;
 import online.devliving.mobilevisionpipeline.Util;
 
@@ -60,7 +59,7 @@ public class CameraSourcePreview extends ViewGroup {
     }
 
     @RequiresPermission(Manifest.permission.CAMERA)
-    public void start(CameraSource cameraSource) throws IOException, SecurityException {
+    public void start(CameraSource cameraSource) throws Exception {
         if (cameraSource == null) {
             stop();
         }
@@ -75,7 +74,7 @@ public class CameraSourcePreview extends ViewGroup {
     }
 
     @RequiresPermission(Manifest.permission.CAMERA)
-    public void start(CameraSource cameraSource, GraphicOverlay overlay) throws IOException, SecurityException {
+    public void start(CameraSource cameraSource, GraphicOverlay overlay) throws Exception {
         mOverlay = overlay;
         start(cameraSource);
     }
@@ -94,7 +93,7 @@ public class CameraSourcePreview extends ViewGroup {
     }
 
     @RequiresPermission(Manifest.permission.CAMERA)
-    private void startIfReady() throws IOException, SecurityException {
+    private void startIfReady() throws Exception {
         if (mStartRequested && mSurfaceAvailable) {
             mCameraSource.start(mSurfaceView.getHolder());
             updateOverlay();
@@ -127,8 +126,8 @@ public class CameraSourcePreview extends ViewGroup {
             try {
                 startIfReady();
             } catch (SecurityException se) {
-                Log.e(TAG, "Do not have permission to start the camera", se);
-            } catch (IOException e) {
+                Log.e(TAG, "You do not have permission to start the camera", se);
+            } catch (Exception e) {
                 Log.e(TAG, "Could not start camera source.", e);
             }
         }
@@ -177,8 +176,8 @@ public class CameraSourcePreview extends ViewGroup {
         try {
             startIfReady();
         } catch (SecurityException se) {
-            Log.e(TAG, "Do not have permission to start the camera", se);
-        } catch (IOException e) {
+            Log.e(TAG, "You do not have permission to start the camera", se);
+        } catch (Exception e) {
             Log.e(TAG, "Could not start camera source.", e);
         }
     }

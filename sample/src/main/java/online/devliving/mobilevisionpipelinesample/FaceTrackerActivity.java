@@ -35,8 +35,6 @@ import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 
-import java.io.IOException;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import online.devliving.mobilevisionpipeline.GraphicOverlay;
@@ -246,14 +244,13 @@ public final class FaceTrackerActivity extends AppCompatActivity {
         if (mCameraSource != null) {
             try {
                 mPreview.start(mCameraSource, mGraphicOverlay);
-            } catch (IOException e) {
+            } catch (SecurityException ex) {
+                Toast.makeText(this, "Camera permission required", Toast.LENGTH_LONG).show();
+                finish();
+            } catch (Exception e) {
                 Log.e(TAG, "Unable to start camera source.", e);
                 mCameraSource.release();
                 mCameraSource = null;
-            }
-            catch (SecurityException ex){
-                Toast.makeText(this, "Camera permission required", Toast.LENGTH_LONG).show();
-                finish();
             }
         }
     }
