@@ -9,12 +9,12 @@ Android Play Services SDK level 26 or greater.
 ## Setup
 *Gradle*
 ```groovy
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
 ```
 ```groovy
 implementation 'com.google.android.gms:play-services-basement:latest_version'

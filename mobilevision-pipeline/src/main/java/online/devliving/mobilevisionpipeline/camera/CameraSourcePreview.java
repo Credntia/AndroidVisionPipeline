@@ -18,7 +18,6 @@ package online.devliving.mobilevisionpipeline.camera;
 import android.Manifest;
 import android.content.Context;
 import android.content.res.Configuration;
-import androidx.annotation.RequiresPermission;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -29,29 +28,29 @@ import com.google.android.gms.common.images.Size;
 
 import java.io.IOException;
 
+import androidx.annotation.RequiresPermission;
 import online.devliving.mobilevisionpipeline.GraphicOverlay;
 import online.devliving.mobilevisionpipeline.Util;
 
+@SuppressWarnings("unused")
 public class CameraSourcePreview extends ViewGroup {
-    public enum PreviewScaleType{
+    public enum PreviewScaleType {
         FIT_CENTER,
         FILL
     }
 
     private static final String TAG = "CameraSourcePreview";
 
-    private Context mContext;
     private SurfaceView mSurfaceView;
     private boolean mStartRequested;
     private boolean mSurfaceAvailable;
     private CameraSource mCameraSource;
 
     private GraphicOverlay mOverlay;
-    private PreviewScaleType mPreviewScaletype = PreviewScaleType.FILL;
+    private PreviewScaleType mPreviewScaleType = PreviewScaleType.FILL;
 
     public CameraSourcePreview(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
         mStartRequested = false;
         mSurfaceAvailable = false;
 
@@ -103,7 +102,7 @@ public class CameraSourcePreview extends ViewGroup {
         }
     }
 
-    void updateOverlay(){
+    void updateOverlay() {
         Size size = mCameraSource.getPreviewSize();
 
         if (mOverlay != null && size != null) {
@@ -149,14 +148,14 @@ public class CameraSourcePreview extends ViewGroup {
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.d(TAG, "Configuration changed");
-        if (mCameraSource != null){
+        if (mCameraSource != null) {
             mCameraSource.updateRotation();
             updateOverlay();
         }
     }
 
-    public void setScaletype(PreviewScaleType mPreviewScaletype) {
-        this.mPreviewScaletype = mPreviewScaletype;
+    public void setScaleType(PreviewScaleType previewScaleType) {
+        this.mPreviewScaleType = previewScaleType;
         postInvalidate();
     }
 
@@ -165,7 +164,7 @@ public class CameraSourcePreview extends ViewGroup {
         final int layoutWidth = right - left;
         final int layoutHeight = bottom - top;
 
-        switch (mPreviewScaletype){
+        switch (mPreviewScaleType) {
             case FILL:
                 updateChildSizeForFill(layoutWidth, layoutHeight);
                 break;
@@ -251,7 +250,7 @@ public class CameraSourcePreview extends ViewGroup {
     }
     */
 
-    void updateChildSizeForCenterFit(int layoutWidth, int layoutHeight){
+    void updateChildSizeForCenterFit(int layoutWidth, int layoutHeight) {
         int previewWidth = 320;
         int previewHeight = 240;
         if (mCameraSource != null) {
@@ -265,52 +264,50 @@ public class CameraSourcePreview extends ViewGroup {
         // Swap width and height sizes when in portrait, since it will be rotated 90 degrees
         if (isPortraitMode()) {
             int tmp = previewWidth;
+            //noinspection SuspiciousNameCombination
             previewWidth = previewHeight;
             previewHeight = tmp;
         }
 
-        final int viewWidth = layoutWidth;
-        final int viewHeight = layoutHeight;
-
         int childWidth;
         int childHeight;
-        int childXOffset = 0;
-        int childYOffset = 0;
-        float widthRatio = (float) viewWidth / (float) previewWidth;
-        float heightRatio = (float) viewHeight / (float) previewHeight;
+        int childXOffset;
+        int childYOffset;
+        float widthRatio = (float) layoutWidth / (float) previewWidth;
+        float heightRatio = (float) layoutHeight / (float) previewHeight;
 
         // To fill the view with the camera preview, while also preserving the correct aspect ratio,
         // it is usually necessary to slightly oversize the child and to crop off portions along one
         // of the dimensions.  We scale up based on the dimension requiring the most correction, and
         // compute a crop offset for the other dimension.
         if (widthRatio > heightRatio) {
-            childWidth = viewWidth;
+            childWidth = layoutWidth;
             childHeight = (int) ((float) previewHeight * widthRatio);
             //childYOffset = (childHeight - viewHeight) / 2;
         } else {
             childWidth = (int) ((float) previewWidth * heightRatio);
-            childHeight = viewHeight;
+            childHeight = layoutHeight;
             //childXOffset = (childWidth - viewWidth) / 2;
         }
 
-        if(childWidth > viewWidth){
-            while (childWidth > viewWidth){
+        if (childWidth > layoutWidth) {
+            while (childWidth > layoutWidth) {
                 childWidth--;
                 widthRatio = (float) childWidth / (float) previewWidth;
                 childHeight = (int) ((float) previewHeight * widthRatio);
             }
         }
 
-        if(childHeight > viewHeight){
-            while (childHeight > viewHeight){
+        if (childHeight > layoutHeight) {
+            while (childHeight > layoutHeight) {
                 childHeight--;
                 heightRatio = (float) childHeight / (float) previewHeight;
                 childWidth = (int) ((float) previewWidth * heightRatio);
             }
         }
 
-        childYOffset = (childHeight - viewHeight) / 2;
-        childXOffset = (childWidth - viewWidth) / 2;
+        childYOffset = (childHeight - layoutHeight) / 2;
+        childXOffset = (childWidth - layoutWidth) / 2;
 
         Log.d("PREVIEW", "layout w:" + layoutWidth + ", h:" + layoutHeight + "; child w:" + childWidth
                 + ", h:" + childHeight + ", x:" + childXOffset + ", y:" + childYOffset);
@@ -323,7 +320,7 @@ public class CameraSourcePreview extends ViewGroup {
         }
     }
 
-    void updateChildSizeForFill(int layoutWidth, int layoutHeight){
+    void updateChildSizeForFill(int layoutWidth, int layoutHeight) {
         int previewWidth = 320;
         int previewHeight = 240;
         if (mCameraSource != null) {
@@ -337,32 +334,30 @@ public class CameraSourcePreview extends ViewGroup {
         // Swap width and height sizes when in portrait, since it will be rotated 90 degrees
         if (isPortraitMode()) {
             int tmp = previewWidth;
+            //noinspection SuspiciousNameCombination
             previewWidth = previewHeight;
             previewHeight = tmp;
         }
-
-        final int viewWidth = layoutWidth;
-        final int viewHeight = layoutHeight;
 
         int childWidth;
         int childHeight;
         int childXOffset = 0;
         int childYOffset = 0;
-        float widthRatio = (float) viewWidth / (float) previewWidth;
-        float heightRatio = (float) viewHeight / (float) previewHeight;
+        float widthRatio = (float) layoutWidth / (float) previewWidth;
+        float heightRatio = (float) layoutHeight / (float) previewHeight;
 
         // To fill the view with the camera preview, while also preserving the correct aspect ratio,
         // it is usually necessary to slightly oversize the child and to crop off portions along one
         // of the dimensions.  We scale up based on the dimension requiring the most correction, and
         // compute a crop offset for the other dimension.
         if (widthRatio > heightRatio) {
-            childWidth = viewWidth;
+            childWidth = layoutWidth;
             childHeight = (int) ((float) previewHeight * widthRatio);
-            childYOffset = (childHeight - viewHeight) / 2;
+            childYOffset = (childHeight - layoutHeight) / 2;
         } else {
             childWidth = (int) ((float) previewWidth * heightRatio);
-            childHeight = viewHeight;
-            childXOffset = (childWidth - viewWidth) / 2;
+            childHeight = layoutHeight;
+            childXOffset = (childWidth - layoutWidth) / 2;
         }
         Log.d("PREVIEW", "layout w:" + layoutWidth + ", h:" + layoutHeight + "; child w:" + childWidth
                 + ", h:" + childHeight + ", x:" + childXOffset + ", y:" + childYOffset);
