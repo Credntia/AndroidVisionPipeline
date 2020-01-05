@@ -5,9 +5,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
-
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1'
     }
 }
 
@@ -15,9 +12,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven {
-            url  "http://dl.bintray.com/steveliles/maven"
-        }
     }
 }
 
