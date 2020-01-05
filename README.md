@@ -1,4 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/iammehedi/Maven/online.devliving%3Amobilevisionpipeline/images/download.svg) ](https://bintray.com/iammehedi/Maven/online.devliving%3Amobilevisionpipeline/_latestVersion)
+[![](https://jitpack.io/v/hannesa2/AndroidVisionPipeline.svg)](https://jitpack.io/#hannesa2/AndroidVisionPipeline)
 
 # AndroidVisionPipeline
 The bare bone pipeline infrastructure required for using google's android vision detectors. Most of the source codes were extracted from [Google's android vision sample](https://github.com/googlesamples/android-vision).
@@ -9,19 +9,17 @@ Android Play Services SDK level 26 or greater.
 ## Setup
 *Gradle*
 ```groovy
-compile 'com.google.android.gms:play-services-basement:latest_version'
-compile 'com.google.android.gms:play-services-vision:latest_version'
-compile 'online.devliving:mobilevision-pipeline:latest_version'
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
 ```
-
-*Maven*
-```xml
-<dependency>
-  <groupId>online.devliving</groupId>
-  <artifactId>mobilevision-pipeline</artifactId>
-  <version>latest_version</version>
-  <type>pom</type>
-</dependency>
+```groovy
+implementation 'com.google.android.gms:play-services-basement:latest_version'
+implementation 'com.google.android.gms:play-services-vision:latest_version'
+implementation 'com.github.hannesa2:AndroidVisionPipeline:latest_version'
 ```
 
 ## Usage
