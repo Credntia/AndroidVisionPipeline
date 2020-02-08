@@ -177,7 +177,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
         return mGraphics;
     }
 
-    public void addFrame(FrameGraphic frameGraphic){
+    public void addFrame(FrameGraphic frameGraphic) {
         mFrameGraphic = frameGraphic;
         postInvalidate();
     }

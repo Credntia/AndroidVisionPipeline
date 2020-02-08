@@ -26,14 +26,14 @@ import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Build;
 import android.os.SystemClock;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresPermission;
-import androidx.annotation.StringDef;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.WindowManager;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
+import androidx.annotation.StringDef;
 
 import com.google.android.gms.common.images.Size;
 import com.google.android.gms.vision.Detector;
@@ -106,7 +106,8 @@ public class CameraSource {
             Camera.Parameters.FOCUS_MODE_MACRO
     })
     @Retention(RetentionPolicy.SOURCE)
-    private @interface FocusMode {}
+    private @interface FocusMode {
+    }
 
     @StringDef({
             Camera.Parameters.FLASH_MODE_ON,
@@ -116,7 +117,8 @@ public class CameraSource {
             Camera.Parameters.FLASH_MODE_TORCH
     })
     @Retention(RetentionPolicy.SOURCE)
-    private @interface FlashMode {}
+    private @interface FlashMode {
+    }
 
     private Context mContext;
 
@@ -149,7 +151,6 @@ public class CameraSource {
     // These instances need to be held onto to avoid GC of their underlying resources.  Even though
     // these aren't used outside of the method that creates them, they still must have hard
     // references maintained to them.
-    private SurfaceView mDummySurfaceView;
     private SurfaceTexture mDummySurfaceTexture;
 
     /**
@@ -736,7 +737,6 @@ public class CameraSource {
 
     /**
      * Opens the camera and applies the user settings.
-     *
      */
     @SuppressLint("InlinedApi")
     private Camera createCamera() throws Exception {
@@ -746,7 +746,7 @@ public class CameraSource {
         }
         Camera camera = Camera.open(mCameraId);
 
-        SizePair sizePair = (mRequestedPreviewHeight > 0 && mRequestedPreviewWidth > 0)?
+        SizePair sizePair = (mRequestedPreviewHeight > 0 && mRequestedPreviewWidth > 0) ?
                 selectSizePair(camera, mRequestedPreviewWidth, mRequestedPreviewHeight) : selectSizePair(camera);
         if (sizePair == null) {
             throw new RuntimeException("Could not find suitable preview size.");
@@ -875,7 +875,7 @@ public class CameraSource {
      * ratio.  On some hardware, if you would only set the preview size, you will get a distorted
      * image.
      *
-     * @param camera        the camera to select a preview size from
+     * @param camera the camera to select a preview size from
      * @return the selected preview and picture size pair
      */
     private static SizePair selectSizePair(Camera camera) {
@@ -905,8 +905,7 @@ public class CameraSource {
         private Size mPreview;
         private Size mPicture;
 
-        public SizePair(android.hardware.Camera.Size previewSize,
-                        android.hardware.Camera.Size pictureSize) {
+        public SizePair(android.hardware.Camera.Size previewSize, android.hardware.Camera.Size pictureSize) {
             mPreview = new Size(previewSize.width, previewSize.height);
             if (pictureSize != null) {
                 mPicture = new Size(pictureSize.width, pictureSize.height);
@@ -1001,11 +1000,12 @@ public class CameraSource {
         return selectedFpsRange;
     }
 
-    public void updateRotation(){
-        if(mCamera != null){
+    public void updateRotation() {
+        if (mCamera != null) {
             setRotation(mCamera, mCamera.getParameters(), mCameraId);
         }
     }
+
     /**
      * Calculates the correct rotation for the given camera id and sets the rotation in the
      * parameters.  It also sets the camera's display orientation and rotation.

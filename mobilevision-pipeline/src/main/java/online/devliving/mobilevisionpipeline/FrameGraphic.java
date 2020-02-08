@@ -56,7 +56,8 @@ public abstract class FrameGraphic extends GraphicOverlay.Graphic implements Uti
     public int getScaledFrameWidth() {
         return Float.valueOf(frameWidth / mOverlay.getWidthScaleFactor()).intValue();
     }
-    public int getScaledFrameHeight(){
+
+    public int getScaledFrameHeight() {
         return Float.valueOf(frameHeight / mOverlay.getHeightScaleFactor()).intValue();
     }
 

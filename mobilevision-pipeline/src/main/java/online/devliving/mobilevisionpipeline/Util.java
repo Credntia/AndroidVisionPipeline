@@ -37,17 +37,16 @@ public class Util {
         return false;
     }
 
-    public static Bitmap getBitmap(Context context, byte[] yuvData, int width, int height){
+    public static Bitmap getBitmap(Context context, byte[] yuvData, int width, int height) {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             Allocation bmData = renderScriptNV21ToRGBA888(
                     context,
                     width,
                     height,
                     yuvData);
             bmData.copyTo(bitmap);
-        }
-        else{
+        } else {
             YuvImage image = new YuvImage(yuvData, ImageFormat.NV21, width, height, null);
             File tempFile = new File(context.getCacheDir(), "prv_tmp.jpg");
             FileOutputStream outputStream = null;
@@ -58,8 +57,8 @@ public class Util {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 success = false;
-            }finally {
-                if(outputStream != null){
+            } finally {
+                if (outputStream != null) {
                     try {
                         outputStream.flush();
                         outputStream.close();
@@ -69,7 +68,7 @@ public class Util {
                 }
             }
 
-            if(success){
+            if (success) {
                 bitmap = getBitmapFromPath(tempFile.getAbsolutePath(), width, height);
             }
         }
@@ -77,16 +76,14 @@ public class Util {
         return bitmap;
     }
 
-    static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight, boolean keepAspectRatio)
-    {
+    static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight, boolean keepAspectRatio) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
-        final float aspectRatio = (float)height/width;
+        final float aspectRatio = (float) height / width;
         int inSampleSize = 1;
 
-        if(keepAspectRatio)
-        {
+        if (keepAspectRatio) {
             reqHeight = Math.round(reqWidth * aspectRatio);
         }
 
@@ -105,9 +102,8 @@ public class Util {
         return inSampleSize;
     }
 
-    static Bitmap getBitmapFromPath(String path, int width, int height)
-    {
-        if(path != null) {
+    static Bitmap getBitmapFromPath(String path, int width, int height) {
+        if (path != null) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(path, options);
@@ -141,8 +137,9 @@ public class Util {
         return out;
     }
 
-    public interface FrameSizeProvider{
+    public interface FrameSizeProvider {
         int frameWidth();
+
         int frameHeight();
     }
 }
