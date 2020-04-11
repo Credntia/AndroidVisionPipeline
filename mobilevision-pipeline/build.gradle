@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compileOnly 'com.google.android.gms:play-services-basement:17.1.1'
-    compileOnly 'com.google.android.gms:play-services-vision:19.0.0'
+    compileOnly 'com.google.android.gms:play-services-basement:17.2.1'
+    compileOnly 'com.google.android.gms:play-services-vision:20.0.0'
     testImplementation 'junit:junit:4.13'
 }

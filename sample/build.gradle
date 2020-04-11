@@ -19,8 +19,8 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.gms:play-services-basement:17.1.1'
-    implementation 'com.google.android.gms:play-services-vision:19.0.0'
+    implementation 'com.google.android.gms:play-services-basement:17.2.1'
+    implementation 'com.google.android.gms:play-services-vision:20.0.0'
     testImplementation 'junit:junit:4.13'
     implementation project(':mobilevision-pipeline')
 }
