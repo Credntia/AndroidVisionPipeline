@@ -35,7 +35,7 @@ class FaceGraphic extends GraphicOverlay.Graphic {
     private static final float ID_X_OFFSET = -50.0f;
     private static final float BOX_STROKE_WIDTH = 5.0f;
 
-    private static final int COLOR_CHOICES[] = {
+    private static final int[] COLOR_CHOICES = {
             Color.BLUE,
             Color.CYAN,
             Color.GREEN,

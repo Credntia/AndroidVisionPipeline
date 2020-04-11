@@ -30,11 +30,7 @@ public class Util {
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             return false;
         }
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            return true;
-        }
-
-        return false;
+        return orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 
     public static Bitmap getBitmap(Context context, byte[] yuvData, int width, int height) {
@@ -102,7 +98,7 @@ public class Util {
         return inSampleSize;
     }
 
-    static Bitmap getBitmapFromPath(String path, int width, int height) {
+    private static Bitmap getBitmapFromPath(String path, int width, int height) {
         if (path != null) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
@@ -120,7 +116,7 @@ public class Util {
 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    static Allocation renderScriptNV21ToRGBA888(Context context, int width, int height, byte[] nv21) {
+    private static Allocation renderScriptNV21ToRGBA888(Context context, int width, int height, byte[] nv21) {
         RenderScript rs = RenderScript.create(context);
         ScriptIntrinsicYuvToRGB yuvToRgbIntrinsic = ScriptIntrinsicYuvToRGB.create(rs, Element.U8_4(rs));
 
